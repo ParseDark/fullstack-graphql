@@ -6,10 +6,16 @@
 module.exports = {
   Query: {
     // _
-    // __: from client query arguments
-    pets(_, __, ctx) {
-      return ctx.models.Pet.findMany();
+    // __: from client query arguments define from schema
+    // 参数的来源有两种：内置类型，输入类型：
+    // 内置类型:
+    // 输入类型：通过input关键字定义输入字段的shape 
+    pets(_, { input }, ctx) {
+      return ctx.models.Pet.findMany(input);
       // return [{}, {}];
+    },
+    pet(_, { input }, ctx) {
+      return ctx.models.Pet.findOne(input);
     },
     getUsers(_, __, ctx) {
       return ctx.models.User.findOne();

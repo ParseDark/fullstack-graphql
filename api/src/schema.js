@@ -16,8 +16,15 @@ const typeDefs = gql`
         type: String!
     }
 
+    # 输入类型：通过input关键字定义输入字段的shape 
+    input PetInput {
+        name: String!
+        type: String
+    }
+
     type Query {
-        pets: [Pet]!
+        pets(input: PetInput): [Pet]!
+        pet(input: PetInput): Pet
         getUsers: User!
     }
 `;
