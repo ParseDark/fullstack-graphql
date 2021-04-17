@@ -1,6 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const gql = require('graphql-tag');
 
+const sheosList = []
 
 
 const typeDefs = gql`
@@ -25,19 +26,17 @@ const typeDefs = gql`
     me: User!
     shoes(input: ShoeInput): [Shoe]!
   }
+
+  type Mutation{
+    newSheo(input: ShoeInput): Shoe
+  }
 `
 
 const resolvers = {
   Query: {
     shoes(_, { input }) {
       console.log(input);
-      return [
-        {brand: 'nike',size: 41},
-        {brand: 'nike',size: 42},
-        {brand: 'nike',size: 43},
-        {brand: 'nike',size: 44},
-        input
-      ]
+      return sheosList;
     },
     me() {
       return {
@@ -46,6 +45,13 @@ const resolvers = {
         friends: []
       }
     }
+  },
+  Mutation: {
+    newSheo(_, { input }) {
+      console.log(input);
+      sheosList.push(input);
+      return input;
+    },
   }
 }
 
