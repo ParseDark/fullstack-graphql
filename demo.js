@@ -3,19 +3,33 @@ const gql = require('graphql-tag');
 
 const sheosList = [
   {
-    brand: 'NIKE', size: 41, sport:  'Basketball'
+    brand: 'NIKE', size: 41, sport:  'Basketball', user: 1
   },
   {
-    brand: 'NIKE', size: 40, sport:  'football'
+    brand: 'NIKE', size: 40, sport:  'football', user: 1
   },
   {
-    brand: 'JORDAN', size: 40, hawGrip: true
+    brand: 'JORDAN', size: 40, hasGrip: true, user: 2
   },
 ]
 
+const user1 = {
+  id: 1,
+  email: 'hawei@paypal.com',
+  avatar: 'image.png',
+  friends: [],
+  shoes: [{
+    brand: 'NIKE', size: 41, sport:  'Basketball', user: 1
+  },
+  {
+    brand: 'JORDAN', size: 40, hasGrip: true, user: 2
+  },
+  ]
+}
+
 
 const typeDefs = gql`
-  union Footware = Sneaker | Boot
+  # union Footware = Sneaker | Boot
   """
   ShoeType list
   """
@@ -29,23 +43,27 @@ const typeDefs = gql`
     email: String!
     avatar: String!
     friends: [User]!
+    shoes: [Shoe]!
   }
 
   interface Shoe {
     brand: ShoeType!
     size: Int!
+    user: User!
   }
 
   type Sneaker implements Shoe {
     brand: ShoeType!
     size: Int!
     sport: String
+    user: User!
   }
 
   type Boot implements Shoe {
     brand: ShoeType!
     size: Int!
     hasGrip: Boolean
+    user: User!
   }
 
   input ShoeInput {
@@ -56,7 +74,7 @@ const typeDefs = gql`
 
   type Query {
     me: User!
-    shoes(input: ShoeInput): [Footware]!
+    shoes(input: ShoeInput): [Shoe]!
   }
 
   type Mutation{
@@ -71,11 +89,7 @@ const resolvers = {
       return sheosList;
     },
     me() {
-      return {
-        email: 'hawei@paypal.com',
-        avatar: 'image.png',
-        friends: []
-      }
+      return user1
     }
   },
   Mutation: {
@@ -91,12 +105,23 @@ const resolvers = {
       return 'Boot';
     }
   },
-  Footware: {
-    __resolveType(shoe) {
-      if (shoe.sport) return 'Sneaker';
-      return 'Boot';
+  // Footware: {
+  //   __resolveType(shoe) {
+  //     if (shoe.sport) return 'Sneaker';
+  //     return 'Boot';
+  //   }
+  // }
+  Sneaker: {
+    user(shoe) {
+      return user1
+    }
+  },
+  Boot: {
+    user(shoe) {
+      return user1
     }
   }
+
 }
 
 
