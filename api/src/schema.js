@@ -14,6 +14,7 @@ const typeDefs = gql`
         createdAt: String! 
         name: String!
         type: String!
+        img: String!
     }
 
     # 输入类型：通过input关键字定义输入字段的shape 
@@ -26,6 +27,15 @@ const typeDefs = gql`
         pets(input: PetInput): [Pet]!
         pet(input: PetInput): Pet
         getUsers: User!
+    }
+
+    input UserInput {
+        username: String!
+    }
+
+    type Mutation{
+        newPet(input: PetInput): Pet!
+        newUser(input: UserInput): User!
     }
 `;
 

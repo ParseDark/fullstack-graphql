@@ -22,19 +22,24 @@ module.exports = {
     }
     
   },
-  // Mutation: {
-    
-  // },
+  Mutation: {
+    newPet(_, { input }, ctx) {
+      return ctx.models.Pet.create(input)
+    },
+    newUser(_, { input }, ctx) {
+      return ctx.models.User.create(input)
+    },
+  },
   Pet: {
     // id(pet) {
     //   console.log(pet);
     //   return 3;
     // },
-    // img(pet) {
-    //   return pet.type === 'DOG'
-    //     ? 'https://placedog.net/300/300'
-    //     : 'http://placekitten.com/300/300'
-    // }
+    img(pet) {
+      return pet.type === 'DOG'
+        ? 'https://placedog.net/300/300'
+        : 'http://placekitten.com/300/300'
+    }
   },
   User: {
     
