@@ -15,6 +15,7 @@ const sheosList = [
 
 
 const typeDefs = gql`
+  union Footware = Sneaker | Boot
   """
   ShoeType list
   """
@@ -55,7 +56,7 @@ const typeDefs = gql`
 
   type Query {
     me: User!
-    shoes(input: ShoeInput): [Shoe]!
+    shoes(input: ShoeInput): [Footware]!
   }
 
   type Mutation{
@@ -85,6 +86,12 @@ const resolvers = {
     },
   },
   Shoe: {
+    __resolveType(shoe) {
+      if (shoe.sport) return 'Sneaker';
+      return 'Boot';
+    }
+  },
+  Footware: {
     __resolveType(shoe) {
       if (shoe.sport) return 'Sneaker';
       return 'Boot';
