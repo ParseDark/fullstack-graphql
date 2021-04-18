@@ -1,7 +1,17 @@
 const { ApolloServer } = require('apollo-server');
 const gql = require('graphql-tag');
 
-const sheosList = []
+const sheosList = [
+  {
+    brand: 'NIKE', size: 41, sport:  'Basketball'
+  },
+  {
+    brand: 'NIKE', size: 40, sport:  'football'
+  },
+  {
+    brand: 'JORDAN', size: 40, hawGrip: true
+  },
+]
 
 
 const typeDefs = gql`
@@ -20,9 +30,21 @@ const typeDefs = gql`
     friends: [User]!
   }
 
-  type Shoe {
+  interface Shoe {
     brand: ShoeType!
     size: Int!
+  }
+
+  type Sneaker implements Shoe {
+    brand: ShoeType!
+    size: Int!
+    sport: String
+  }
+
+  type Boot implements Shoe {
+    brand: ShoeType!
+    size: Int!
+    hasGrip: Boolean
   }
 
   input ShoeInput {
@@ -61,6 +83,12 @@ const resolvers = {
       sheosList.push(input);
       return input;
     },
+  },
+  Shoe: {
+    __resolveType(shoe) {
+      if (shoe.sport) return 'Sneaker';
+      return 'Boot';
+    }
   }
 }
 
