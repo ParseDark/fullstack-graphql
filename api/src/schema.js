@@ -7,6 +7,7 @@ const typeDefs = gql`
     type User {
         id: ID!
         username: String!
+        pets: [Pet]
     }
 
     type Pet {
@@ -15,6 +16,7 @@ const typeDefs = gql`
         name: String!
         type: String!
         img: String!
+        owner: User!
     }
 
     # 输入类型：通过input关键字定义输入字段的shape 
